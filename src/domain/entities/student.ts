@@ -4,8 +4,8 @@ export class Student {
   public id: string
   public name: string
 
-  constructor(name: string, id?: string) {
+  constructor(name: string, id: string = randomUUID()) {
     this.name=name
-    this.id = id ?? randomUUID()
+    this.id = id
   }
 }

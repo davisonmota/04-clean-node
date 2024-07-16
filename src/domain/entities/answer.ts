@@ -13,11 +13,11 @@ export class Answer {
   public authorId: string
   public questionId: string
 
-  constructor({ authorId, questionId, content, id }: CreateAnswer) {
+  constructor({ id = randomUUID(), authorId, questionId, content }: CreateAnswer) {
     this.authorId = authorId
     this.questionId = questionId
     this.content = content
-    this.id = id ?? randomUUID()
+    this.id = id
   }
 
   getId(): string {

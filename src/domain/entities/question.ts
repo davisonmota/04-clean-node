@@ -7,10 +7,10 @@ export  class Question {
   public authorId: string
 
 
-  constructor(authorId: string, title: string, content: string, id?: string) {
+  constructor(authorId: string, title: string, content: string, id: string = randomUUID()) {
     this.authorId= authorId
     this.title= title
     this.content=content
-    this.id = id ?? randomUUID()
+    this.id = id 
   }
 }
