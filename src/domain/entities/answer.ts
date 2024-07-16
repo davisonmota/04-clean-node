@@ -10,8 +10,8 @@ type CreateAnswer = {
 export class Answer {
   private id: string
   private content: string
-  public authorId: string
-  public questionId: string
+  private authorId: string
+  private questionId: string
 
   constructor({ id = randomUUID(), authorId, questionId, content }: CreateAnswer) {
     this.authorId = authorId
@@ -26,5 +26,13 @@ export class Answer {
 
   getContent(): string {
     return this.content
+  }
+
+  getAuthorId(): string {
+    return this.authorId
+  }
+
+  getQuestionId(): string {
+    return this.questionId
   }
 }
