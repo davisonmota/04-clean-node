@@ -1,4 +1,5 @@
 import { Answer } from "../entities/answer"
+import { AnswersRepository } from "../repositories/answers-repository"
 
 type Input = {
   instructorId: string
@@ -12,8 +13,12 @@ type Output = {
 }
 
 export class AnswerQuestionsUseCase {
+  constructor (private readonly answersRepository: AnswersRepository){}
+
   async execute({instructorId, questionId,content}: Input): Promise<Output> {
     const answer = new Answer({authorId: instructorId, questionId, content})
+
+    await this.answersRepository.create(answer)
 
     return {
       id: answer.getId(),
