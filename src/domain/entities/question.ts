@@ -1,27 +1,13 @@
-import { randomUUID } from "crypto";
+import { Entity } from "../../core/entities/entity";
 import { Slug } from "./Slug";
 
-type CreateQuestion = {
-  id: string
+interface QuestionProps {
   title: string
   slug: Slug
   content: string
   authorId: string
 } 
 
-export  class Question {
-  public id?: string
-  public title: string
-  public slug: Slug
-  public content: string
-  public authorId: string
+export  class Question extends Entity<QuestionProps>{
 
-
-  constructor({id = randomUUID(), authorId, title, content, slug}: CreateQuestion) {
-    this.authorId= authorId
-    this.title= title
-    this.slug = slug
-    this.content = content
-    this.id = id 
-  }
 }
