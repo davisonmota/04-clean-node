@@ -1,8 +1,8 @@
 export class Slug {
-  readonly value: string
+  private readonly _value: string
 
   constructor(value: string) {
-    this.value = value
+    this._value = value
   }
   
   static createFromText(value: string): Slug {
@@ -16,7 +16,10 @@ export class Slug {
       .replace(/--/g, '-')
       .replace(/-$/g, '')
 
-  return new Slug(slugText)
-}
+    return new Slug(slugText)
+  }
   
+  getValue(): string {
+    return this._value
+  }
 }

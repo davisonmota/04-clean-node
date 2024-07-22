@@ -24,11 +24,33 @@ export class Answer extends Entity<AnswerProps> {
     return this.props.content
   }
 
-  getAuthorId(): string {
-    return this.props.authorId.getValue()
+  setContent(content: string): void {
+    this.props.content = content
+    this.touch()
   }
 
-  getQuestionId(): string {
-    return this.props.questionId.getValue()
+  private touch(): void {
+    this.props.updatedAt = new Date()
   }
+
+  getExcept(): string {
+    return this.getContent().substring(0, 120).trimEnd().concat('...')
+  }
+
+  getAuthorId(): UniqueEntityID {
+    return this.props.authorId
+  }
+
+  getQuestionId(): UniqueEntityID {
+    return this.props.questionId
+  }
+  
+  getCreatedAt(): Date {
+    return this.props.createdAt
+  }
+  
+  getUpdatedAt(): Date | undefined {
+    return this.props.updatedAt
+  }
+
 }
