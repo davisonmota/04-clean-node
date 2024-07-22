@@ -4,7 +4,7 @@ export class Slug {
   constructor(value: string) {
     this._value = value
   }
-  
+
   static createFromText(value: string): Slug {
     const slugText = value
       .normalize('NFKD')
@@ -18,7 +18,7 @@ export class Slug {
 
     return new Slug(slugText)
   }
-  
+
   getValue(): string {
     return this._value
   }

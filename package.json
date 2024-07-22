@@ -4,15 +4,19 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest run",
-    "test:w": "vitest"
+    "test:w": "vitest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@rocketseat/eslint-config": "^2.2.2",
     "@types/node": "^20.14.10",
-    "typescript": "^5.5.3",
+    "eslint": "^8.57.0",
+    "typescript": "5.3.3",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^2.0.2"
   },
