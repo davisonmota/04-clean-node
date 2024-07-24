@@ -4,7 +4,7 @@ import { Optional } from '@/core/types/optional'
 import dayjs from 'dayjs'
 import { Slug } from './Slug'
 
-interface QuestionProps {
+export interface QuestionProps {
   title: string
   slug: Slug
   content: string
