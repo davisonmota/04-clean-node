@@ -70,8 +70,8 @@ export class Question extends Entity<QuestionProps> {
     this.touch()
   }
 
-  getAuthorId(): UniqueEntityID {
-    return this.props.authorId
+  getAuthorId(): string {
+    return this.props.authorId.getValue()
   }
 
   getCreatedAt(): Date {

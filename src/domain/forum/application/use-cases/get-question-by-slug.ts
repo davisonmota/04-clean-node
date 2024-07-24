@@ -28,7 +28,7 @@ export class GetQuestionBySlugUseCase {
     return {
       question: {
         id: question.getId(),
-        authorId: question.getAuthorId().getValue(),
+        authorId: question.getAuthorId(),
         title: question.getTitle(),
         content: question.getContent(),
         slug: question.getSlug(),
