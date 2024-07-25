@@ -15,10 +15,11 @@ type Output = {
     content: string
     authorId: string
     createdAt: Date
+    updatedAt: Date
   }
 }
 
-export class EditQuestionBySlugUseCase {
+export class EditQuestionUseCase {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
 
   async execute({
@@ -50,6 +51,7 @@ export class EditQuestionBySlugUseCase {
         content: question.getContent(),
         slug: question.getSlug(),
         createdAt: question.getCreatedAt(),
+        updatedAt: question.getUpdatedAt()!,
       },
     }
   }

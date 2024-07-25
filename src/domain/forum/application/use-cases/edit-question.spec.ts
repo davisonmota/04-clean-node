@@ -2,14 +2,12 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryQuestionsRepository } from '@/infra/repositories/in-memory-question-repository'
 import { makeQuestion } from 'test/factories/make-question'
 import { describe, expect, test } from 'vitest'
-import { EditQuestionBySlugUseCase } from './edit-question'
+import { EditQuestionUseCase } from './edit-question'
 
 describe('Edit Question Use Case', () => {
   test('deve editar uma dúvida (question)', async () => {
     const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
-    const editQuestion = new EditQuestionBySlugUseCase(
-      inMemoryRepositoryQuestions,
-    )
+    const editQuestion = new EditQuestionUseCase(inMemoryRepositoryQuestions)
 
     const newQuestion = makeQuestion(
       {
@@ -38,9 +36,7 @@ describe('Edit Question Use Case', () => {
 
   test('Não deve editar uma dúvida (question) se não for o autor', async () => {
     const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
-    const deleteQuestion = new EditQuestionBySlugUseCase(
-      inMemoryRepositoryQuestions,
-    )
+    const deleteQuestion = new EditQuestionUseCase(inMemoryRepositoryQuestions)
 
     const newQuestion = makeQuestion(
       {
