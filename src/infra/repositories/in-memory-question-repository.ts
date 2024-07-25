@@ -31,4 +31,3 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
     this.items.splice(indexItem, 1)
   }
 }
-// 8079 portaria
