@@ -1,7 +1,10 @@
 import { QuestionsRepository } from '../repositories/questions-repository'
 
 type Input = {
-  slug: string
+  userId: string
+  questionId: string
+  title: string
+  content: string
 }
 
 type Output = {
@@ -15,15 +18,29 @@ type Output = {
   }
 }
 
-export class GetQuestionBySlugUseCase {
+export class EditQuestionBySlugUseCase {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
 
-  async execute({ slug }: Input): Promise<Output> {
-    const question = await this.questionsRepository.findBySlug(slug)
+  async execute({
+    userId,
+    questionId,
+    title,
+    content,
+  }: Input): Promise<Output> {
+    const question = await this.questionsRepository.findById(questionId)
 
     if (!question) {
       throw new Error('Question not found.')
     }
+
+    if (userId !== question.getAuthorId()) {
+      throw new Error('Not allowed.')
+    }
+
+    question.setTitle(title)
+    question.setContent(content)
+
+    await this.questionsRepository.save(question)
 
     return {
       question: {
