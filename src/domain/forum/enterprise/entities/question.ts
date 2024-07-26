@@ -61,8 +61,8 @@ export class Question extends Entity<QuestionProps> {
     return this.getContent().substring(0, 120).trimEnd().concat('...')
   }
 
-  getBestAnswerId(): UniqueEntityID | undefined {
-    return this.props.bestAnswerId
+  getBestAnswerId(): string | undefined {
+    return this.props.bestAnswerId?.getValue()
   }
 
   setBestAnswerId(bestAnswerId: UniqueEntityID): void {

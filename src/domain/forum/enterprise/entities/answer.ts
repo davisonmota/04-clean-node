@@ -46,8 +46,8 @@ export class Answer extends Entity<AnswerProps> {
     return this.props.authorId.getValue()
   }
 
-  getQuestionId(): UniqueEntityID {
-    return this.props.questionId
+  getQuestionId(): string {
+    return this.props.questionId.getValue()
   }
 
   getCreatedAt(): Date {
