@@ -1,6 +1,7 @@
 import { InMemoryAnswerCommentsRepository } from '@/infra/repositories/in-memory-answer-comments-repository'
 import { makeAnswerComment } from 'test/factories/make-answer-comment'
 import { describe, expect, test } from 'vitest'
+import { NotAllowedError } from '../errors/not-allowed-error '
 import { DeleteAnswerCommentUseCase } from './delete-answer-comment'
 
 describe('Delete Answer Comment Use Case', () => {
@@ -32,11 +33,12 @@ describe('Delete Answer Comment Use Case', () => {
     const answerComment = makeAnswerComment()
     await inMemoryAnswerCommentsRepository.create(answerComment)
 
-    const promise = deleteAnswerCommentUseCase.execute({
+    const result = await deleteAnswerCommentUseCase.execute({
       userId: 'another-user-id',
       answerCommentId: answerComment.getId(),
     })
 
-    expect(promise).rejects.toThrowError()
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })
