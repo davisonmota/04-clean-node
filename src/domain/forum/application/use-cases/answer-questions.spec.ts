@@ -1,14 +1,11 @@
+import { InMemoryAnswersRepository } from '@/infra/repositories/in-memory-answers-repository'
 import { describe, expect, test } from 'vitest'
-import { AnswersRepository } from '../repositories/answers-repository'
 import { AnswerQuestionsUseCase } from './answer-questions'
-
-const fakeAnswersRepository: AnswersRepository = {
-  async create() {},
-}
 
 describe('Answer Question Use Case', () => {
   test('deve responder uma dúvida (question)', async () => {
-    const answerQuestion = new AnswerQuestionsUseCase(fakeAnswersRepository)
+    const inMemoryRepositoryAnswers = new InMemoryAnswersRepository()
+    const answerQuestion = new AnswerQuestionsUseCase(inMemoryRepositoryAnswers)
 
     const outputAnswerQuestion = await answerQuestion.execute({
       instructorId: '1',
