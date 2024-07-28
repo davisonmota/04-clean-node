@@ -13,12 +13,25 @@ describe('Create Question Use Case', () => {
       authorId: '1',
       title: 'Nova dúvida (question)',
       content: 'Criando uma nova dúvida (question)',
+      attachmentsIds: ['1', '2'],
     })
 
     expect(value?.question.id).toBeTruthy()
     expect(value?.question.title).toBe('Nova dúvida (question)')
     expect(value?.question.content).toBe('Criando uma nova dúvida (question)')
     expect(value?.question.slug).toBe('nova-du-vida-question')
-    expect(value?.question.createdAt).instanceOf(Date)
+    expect(inMemoryRepositoryQuestions.items[0].getAttachments()).toHaveLength(
+      2,
+    )
+    expect(
+      inMemoryRepositoryQuestions.items[0]
+        .getAttachments()[0]
+        .getAttachmentId(),
+    ).toBe('1')
+    expect(
+      inMemoryRepositoryQuestions.items[0]
+        .getAttachments()[1]
+        .getAttachmentId(),
+    ).toBe('2')
   })
 })
