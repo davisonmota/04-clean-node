@@ -4,6 +4,7 @@ import { InMemoryQuestionsRepository } from '@/infra/repositories/in-memory-ques
 import { makeAnswer } from 'test/factories/make-answer'
 import { makeQuestion } from 'test/factories/make-question'
 import { describe, expect, test } from 'vitest'
+import { NotAllowedError } from '../errors/not-allowed-error '
 import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
 
 describe('Choose Question Best Answer Use Case', () => {
@@ -51,11 +52,12 @@ describe('Choose Question Best Answer Use Case', () => {
     await inMemoryQuestionsRepository.create(question)
     await inMemoryAnswersRepository.create(answer)
 
-    const promises = chooseQuestionBestAnswerUseCase.execute({
+    const result = await chooseQuestionBestAnswerUseCase.execute({
       userId: 'another-user-id',
       answerId: answer.getId(),
     })
 
-    expect(promises).rejects.toBeInstanceOf(Error)
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })

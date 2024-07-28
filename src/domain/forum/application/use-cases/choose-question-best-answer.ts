@@ -1,4 +1,7 @@
+import { Either, left, right } from '@/core/either'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { NotAllowedError } from '../errors/not-allowed-error '
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { AnswersRepository } from '../repositories/answers-repository'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
@@ -7,17 +10,20 @@ type Input = {
   answerId: string
 }
 
-type Output = {
-  question: {
-    id: string
-    title: string
-    slug: string
-    content: string
-    authorId: string
-    bestAnswerId: string
-    createdAt: Date
+type Output = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {
+    question: {
+      id: string
+      title: string
+      slug: string
+      content: string
+      authorId: string
+      bestAnswerId: string
+      createdAt: Date
+    }
   }
-}
+>
 
 export class ChooseQuestionBestAnswerUseCase {
   constructor(
@@ -28,25 +34,25 @@ export class ChooseQuestionBestAnswerUseCase {
   async execute({ userId, answerId }: Input): Promise<Output> {
     const answer = await this.answersRepository.findById(answerId)
     if (!answer) {
-      throw new Error('Answer not found.')
+      return left(new ResourceNotFoundError())
     }
 
     const question = await this.questionsRepository.findById(
       answer.getQuestionId(),
     )
     if (!question) {
-      throw new Error('Question not found.')
+      return left(new ResourceNotFoundError())
     }
 
     if (question.getId() !== userId) {
-      throw new Error('Not allowed.')
+      return left(new NotAllowedError())
     }
 
     question.setBestAnswerId(new UniqueEntityID(answer.getId()))
 
     await this.questionsRepository.save(question)
 
-    return {
+    return right({
       question: {
         id: question.getId(),
         authorId: question.getAuthorId(),
@@ -56,6 +62,6 @@ export class ChooseQuestionBestAnswerUseCase {
         bestAnswerId: question.getBestAnswerId()!,
         createdAt: question.getCreatedAt(),
       },
-    }
+    })
   }
 }

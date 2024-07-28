@@ -1,3 +1,6 @@
+import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '../errors/not-allowed-error '
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
 type Input = {
@@ -5,20 +8,23 @@ type Input = {
   questionId: string
 }
 
+type Output = Either<ResourceNotFoundError | NotAllowedError, {}>
+
 export class DeleteQuestionUseCase {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
 
-  async execute({ questionId, userId }: Input): Promise<void> {
+  async execute({ questionId, userId }: Input): Promise<Output> {
     const question = await this.questionsRepository.findById(questionId)
 
     if (!question) {
-      throw new Error('Question not found.')
+      return left(new ResourceNotFoundError())
     }
 
     if (userId !== question.getAuthorId()) {
-      throw new Error('Not allowed.')
+      return left(new NotAllowedError())
     }
 
     await this.questionsRepository.delete(question)
+    return right({})
   }
 }

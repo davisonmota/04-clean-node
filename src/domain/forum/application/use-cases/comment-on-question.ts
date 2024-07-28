@@ -1,5 +1,7 @@
+import { Either, left, right } from '@/core/either'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { QuestionComment } from '../../enterprise/entities/question-comment'
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
@@ -9,16 +11,19 @@ type Input = {
   content: string
 }
 
-type Output = {
-  questionComment: {
-    id: string
-    authorId: string
-    questionId: string
-    content: string
-    createdAt: Date
-    updatedAt?: Date
+type Output = Either<
+  ResourceNotFoundError,
+  {
+    questionComment: {
+      id: string
+      authorId: string
+      questionId: string
+      content: string
+      createdAt: Date
+      updatedAt?: Date
+    }
   }
-}
+>
 
 export class CommentOnQuestionUseCase {
   constructor(
@@ -29,7 +34,7 @@ export class CommentOnQuestionUseCase {
   async execute({ authorId, questionId, content }: Input): Promise<Output> {
     const question = await this.questionsRepository.findById(questionId)
     if (!question) {
-      throw new Error('Question not found.')
+      return left(new ResourceNotFoundError())
     }
 
     const questionComment = QuestionComment.create({
@@ -40,7 +45,7 @@ export class CommentOnQuestionUseCase {
 
     await this.questionCommentsRepository.create(questionComment)
 
-    return {
+    return right({
       questionComment: {
         id: questionComment.getId(),
         questionId: questionComment.getQuestionId(),
@@ -49,6 +54,6 @@ export class CommentOnQuestionUseCase {
         createdAt: questionComment.getCreatedAt(),
         updatedAt: questionComment?.getUpdatedAt(),
       },
-    }
+    })
   }
 }

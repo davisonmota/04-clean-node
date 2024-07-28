@@ -28,12 +28,12 @@ describe('Fetch Question Comments Use Case', () => {
       }),
     )
 
-    const { questionComments } = await fetQuestionAnswersUseCase.execute({
+    const result = await fetQuestionAnswersUseCase.execute({
       page: 1,
       questionId: 'question-id',
     })
 
-    expect(questionComments).toHaveLength(3)
+    expect(result.value?.questionComments).toHaveLength(3)
   })
 
   test('should be able to fetch paginated question answers', async () => {
@@ -50,10 +50,10 @@ describe('Fetch Question Comments Use Case', () => {
       )
     }
 
-    const { questionComments } = await fetQuestionAnswersUseCase.execute({
+    const result = await fetQuestionAnswersUseCase.execute({
       page: 2,
       questionId: 'question-id',
     })
-    expect(questionComments).toHaveLength(5)
+    expect(result.value?.questionComments).toHaveLength(5)
   })
 })

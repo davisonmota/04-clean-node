@@ -2,6 +2,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryAnswersRepository } from '@/infra/repositories/in-memory-answers-repository'
 import { makeAnswer } from 'test/factories/make-answer'
 import { describe, expect, test, vi } from 'vitest'
+import { NotAllowedError } from '../errors/not-allowed-error '
 import { EditAnswerUseCase } from './edit-answer'
 
 describe('Edit Answer Use Case', () => {
@@ -48,12 +49,13 @@ describe('Edit Answer Use Case', () => {
 
     await inMemoryAnswersRepository.create(newAnswer)
 
-    const promise = editAnswer.execute({
+    const result = await editAnswer.execute({
       userId: 'any-user-id',
       answerId: 'id-answer',
       content: 'New content edited',
     })
 
-    expect(promise).rejects.toBeInstanceOf(Error)
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })

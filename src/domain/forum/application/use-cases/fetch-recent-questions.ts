@@ -1,3 +1,4 @@
+import { Either, right } from '@/core/either'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
 type Input = {
@@ -16,9 +17,12 @@ type QuestionDTO = {
   isNew: boolean
 }
 
-type Output = {
-  questions: QuestionDTO[]
-}
+type Output = Either<
+  null,
+  {
+    questions: QuestionDTO[]
+  }
+>
 
 export class FetRecentQuestionUseCase {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
@@ -40,8 +44,8 @@ export class FetRecentQuestionUseCase {
       }
     })
 
-    return {
+    return right({
       questions: questionsDTO,
-    }
+    })
   }
 }

@@ -13,7 +13,7 @@ describe('Answer Question Use Case', () => {
       content: 'Nova resposta para a dúvida do aluno',
     })
 
-    expect(outputAnswerQuestion.content).toBe(
+    expect(outputAnswerQuestion.value?.content).toBe(
       'Nova resposta para a dúvida do aluno',
     )
   })

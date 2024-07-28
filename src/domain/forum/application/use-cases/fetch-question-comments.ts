@@ -1,3 +1,4 @@
+import { Either, right } from '@/core/either'
 import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
 
 type Input = {
@@ -14,9 +15,12 @@ type QuestionCommentDTO = {
   updatedAt?: Date
 }
 
-type Output = {
-  questionComments: QuestionCommentDTO[]
-}
+type Output = Either<
+  null,
+  {
+    questionComments: QuestionCommentDTO[]
+  }
+>
 
 export class FetQuestionCommentUseCase {
   constructor(
@@ -42,8 +46,8 @@ export class FetQuestionCommentUseCase {
       },
     )
 
-    return {
+    return right({
       questionComments: questionCommentDTO,
-    }
+    })
   }
 }

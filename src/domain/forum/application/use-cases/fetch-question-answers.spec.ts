@@ -27,12 +27,12 @@ describe('Fetch Question Answers Use Case', () => {
       }),
     )
 
-    const { answers } = await fetQuestionAnswersUseCase.execute({
+    const result = await fetQuestionAnswersUseCase.execute({
       page: 1,
       questionId: 'question-id',
     })
 
-    expect(answers).toEqual([
+    expect(result.value?.answers).toEqual([
       expect.objectContaining({
         questionId: 'question-id',
       }),
@@ -43,7 +43,7 @@ describe('Fetch Question Answers Use Case', () => {
         questionId: 'question-id',
       }),
     ])
-    expect(answers).toHaveLength(3)
+    expect(result.value?.answers).toHaveLength(3)
   })
 
   test('should be able to fetch paginated question answers', async () => {
@@ -60,10 +60,10 @@ describe('Fetch Question Answers Use Case', () => {
       )
     }
 
-    const { answers } = await fetQuestionAnswersUseCase.execute({
+    const result = await fetQuestionAnswersUseCase.execute({
       page: 2,
       questionId: 'question-id',
     })
-    expect(answers).toHaveLength(5)
+    expect(result.value?.answers).toHaveLength(5)
   })
 })

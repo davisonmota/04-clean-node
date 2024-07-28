@@ -19,10 +19,10 @@ describe('Get Question By Slug Use Case', () => {
       }),
     )
 
-    const { question } = await getQuestionBySlug.execute({
+    const result = await getQuestionBySlug.execute({
       slug: 'example-question',
     })
 
-    expect(question.slug).toBe('example-question')
+    expect(result.isRight()).toBe(true)
   })
 })

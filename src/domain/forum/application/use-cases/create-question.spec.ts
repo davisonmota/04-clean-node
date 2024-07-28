@@ -9,16 +9,16 @@ describe('Create Question Use Case', () => {
       inMemoryRepositoryQuestions,
     )
 
-    const { question } = await answerQuestion.execute({
+    const { value } = await answerQuestion.execute({
       authorId: '1',
       title: 'Nova dúvida (question)',
       content: 'Criando uma nova dúvida (question)',
     })
 
-    expect(question.id).toBeTruthy()
-    expect(question.title).toBe('Nova dúvida (question)')
-    expect(question.content).toBe('Criando uma nova dúvida (question)')
-    expect(question.slug).toBe('nova-du-vida-question')
-    expect(question.createdAt).instanceOf(Date)
+    expect(value?.question.id).toBeTruthy()
+    expect(value?.question.title).toBe('Nova dúvida (question)')
+    expect(value?.question.content).toBe('Criando uma nova dúvida (question)')
+    expect(value?.question.slug).toBe('nova-du-vida-question')
+    expect(value?.question.createdAt).instanceOf(Date)
   })
 })

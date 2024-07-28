@@ -1,3 +1,6 @@
+import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '../errors/not-allowed-error '
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
 type Input = {
@@ -7,17 +10,20 @@ type Input = {
   content: string
 }
 
-type Output = {
-  question: {
-    id: string
-    title: string
-    slug: string
-    content: string
-    authorId: string
-    createdAt: Date
-    updatedAt: Date
+type Output = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {
+    question: {
+      id: string
+      title: string
+      slug: string
+      content: string
+      authorId: string
+      createdAt: Date
+      updatedAt: Date
+    }
   }
-}
+>
 
 export class EditQuestionUseCase {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
@@ -31,11 +37,11 @@ export class EditQuestionUseCase {
     const question = await this.questionsRepository.findById(questionId)
 
     if (!question) {
-      throw new Error('Question not found.')
+      return left(new ResourceNotFoundError())
     }
 
     if (userId !== question.getAuthorId()) {
-      throw new Error('Not allowed.')
+      return left(new NotAllowedError())
     }
 
     question.setTitle(title)
@@ -43,7 +49,7 @@ export class EditQuestionUseCase {
 
     await this.questionsRepository.save(question)
 
-    return {
+    return right({
       question: {
         id: question.getId(),
         authorId: question.getAuthorId(),
@@ -53,6 +59,6 @@ export class EditQuestionUseCase {
         createdAt: question.getCreatedAt(),
         updatedAt: question.getUpdatedAt()!,
       },
-    }
+    })
   }
 }

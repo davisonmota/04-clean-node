@@ -2,6 +2,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryAnswersRepository } from '@/infra/repositories/in-memory-answers-repository'
 import { makeAnswer } from 'test/factories/make-answer'
 import { describe, expect, test } from 'vitest'
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { DeleteAnswerUseCase } from './delete-answer'
 
 describe('Delete Answer Use Case', () => {
@@ -39,11 +40,12 @@ describe('Delete Answer Use Case', () => {
 
     await inMemoryRepositoryAnswers.create(newAnswer)
 
-    const promises = deleteAnswer.execute({
+    const result = await deleteAnswer.execute({
       userId: 'any-user-id',
       answerId: 'id-answer',
     })
 
-    expect(promises).rejects.toBeInstanceOf(Error)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+    expect(result.isLeft()).toBe(true)
   })
 })
