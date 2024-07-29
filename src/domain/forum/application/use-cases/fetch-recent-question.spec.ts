@@ -1,3 +1,4 @@
+import { InMemoryQuestionAttachmentsRepository } from '@/infra/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionsRepository } from '@/infra/repositories/in-memory-question-repository'
 import { makeQuestion } from 'test/factories/make-question'
 import { describe, expect, test } from 'vitest'
@@ -5,7 +6,11 @@ import { FetRecentQuestionUseCase } from './fetch-recent-questions'
 
 describe('Fetch Recente Question Use Case', () => {
   test('should be able to fetch recent questions', async () => {
-    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
+    const questionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository(
+      questionAttachmentsRepository,
+    )
     const fetchRecentQuestionsUseCase = new FetRecentQuestionUseCase(
       inMemoryRepositoryQuestions,
     )
@@ -38,7 +43,11 @@ describe('Fetch Recente Question Use Case', () => {
   })
 
   test('should be able to fetch paginated recent questions', async () => {
-    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
+    const questionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository(
+      questionAttachmentsRepository,
+    )
     const fetchRecentQuestionsUseCase = new FetRecentQuestionUseCase(
       inMemoryRepositoryQuestions,
     )

@@ -1,5 +1,7 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { InMemoryAnswerAttachmentsRepository } from '@/infra/repositories/in-memory-answer-attachments-repository'
 import { InMemoryAnswersRepository } from '@/infra/repositories/in-memory-answers-repository'
+import { InMemoryQuestionAttachmentsRepository } from '@/infra/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionsRepository } from '@/infra/repositories/in-memory-question-repository'
 import { makeAnswer } from 'test/factories/make-answer'
 import { makeQuestion } from 'test/factories/make-question'
@@ -9,8 +11,16 @@ import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
 
 describe('Choose Question Best Answer Use Case', () => {
   test('should be able to choose the question best answer', async () => {
-    const inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
-    const inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    const questionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      questionAttachmentsRepository,
+    )
+    const answerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    const inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
 
     const chooseQuestionBestAnswerUseCase = new ChooseQuestionBestAnswerUseCase(
       inMemoryQuestionsRepository,
@@ -36,8 +46,16 @@ describe('Choose Question Best Answer Use Case', () => {
   })
 
   test('should not be able to choose another user question best answer', async () => {
-    const inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
-    const inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    const questionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      questionAttachmentsRepository,
+    )
+    const answerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    const inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
 
     const chooseQuestionBestAnswerUseCase = new ChooseQuestionBestAnswerUseCase(
       inMemoryQuestionsRepository,

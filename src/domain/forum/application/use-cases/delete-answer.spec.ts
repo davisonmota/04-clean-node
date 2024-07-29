@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { InMemoryAnswerAttachmentsRepository } from '@/infra/repositories/in-memory-answer-attachments-repository'
 import { InMemoryAnswersRepository } from '@/infra/repositories/in-memory-answers-repository'
 import { makeAnswer } from 'test/factories/make-answer'
 import { describe, expect, test } from 'vitest'
@@ -7,7 +8,12 @@ import { DeleteAnswerUseCase } from './delete-answer'
 
 describe('Delete Answer Use Case', () => {
   test('deve deletar uma resposta (answer) pelo id', async () => {
-    const inMemoryRepositoryAnswers = new InMemoryAnswersRepository()
+    const answerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+
+    const inMemoryRepositoryAnswers = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
     const deleteAnswer = new DeleteAnswerUseCase(inMemoryRepositoryAnswers)
 
     const newAnswer = makeAnswer(
@@ -28,7 +34,12 @@ describe('Delete Answer Use Case', () => {
   })
 
   test('Não deve deletar uma dúvida (question) se não for o autor', async () => {
-    const inMemoryRepositoryAnswers = new InMemoryAnswersRepository()
+    const answerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+
+    const inMemoryRepositoryAnswers = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
     const deleteAnswer = new DeleteAnswerUseCase(inMemoryRepositoryAnswers)
 
     const newAnswer = makeAnswer(

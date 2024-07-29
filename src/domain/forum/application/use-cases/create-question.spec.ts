@@ -1,10 +1,15 @@
+import { InMemoryQuestionAttachmentsRepository } from '@/infra/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionsRepository } from '@/infra/repositories/in-memory-question-repository'
 import { describe, expect, test } from 'vitest'
 import { CreateQuestionUseCase } from './create-question'
 
 describe('Create Question Use Case', () => {
   test('deve responder uma dúvida (question)', async () => {
-    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
+    const inMemoryQuestionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+    )
     const answerQuestion = new CreateQuestionUseCase(
       inMemoryRepositoryQuestions,
     )

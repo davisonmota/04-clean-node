@@ -1,3 +1,4 @@
+import { InMemoryQuestionAttachmentsRepository } from '@/infra/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionCommentsRepository } from '@/infra/repositories/in-memory-question-comments-repository'
 import { InMemoryQuestionsRepository } from '@/infra/repositories/in-memory-question-repository'
 import { makeQuestion } from 'test/factories/make-question'
@@ -6,7 +7,11 @@ import { CommentOnQuestionUseCase } from './comment-on-question'
 
 describe('Comment On Question Use Case', () => {
   test('should be able to comment on question', async () => {
-    const inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    const questionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      questionAttachmentsRepository,
+    )
     const inMemoryQuestionCommentsRepository =
       new InMemoryQuestionCommentsRepository()
 

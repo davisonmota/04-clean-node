@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { InMemoryAnswerAttachmentsRepository } from '@/infra/repositories/in-memory-answer-attachments-repository'
 import { InMemoryAnswersRepository } from '@/infra/repositories/in-memory-answers-repository'
 import { makeAnswer } from 'test/factories/make-answer'
 import { describe, expect, test } from 'vitest'
@@ -6,7 +7,11 @@ import { FetQuestionAnswersUseCase } from './fetch-question-answers'
 
 describe('Fetch Question Answers Use Case', () => {
   test('should be able to fetch question answers', async () => {
-    const inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    const answerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    const inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
     const fetQuestionAnswersUseCase = new FetQuestionAnswersUseCase(
       inMemoryAnswersRepository,
     )
@@ -47,7 +52,11 @@ describe('Fetch Question Answers Use Case', () => {
   })
 
   test('should be able to fetch paginated question answers', async () => {
-    const inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    const answerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    const inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      answerAttachmentsRepository,
+    )
     const fetQuestionAnswersUseCase = new FetQuestionAnswersUseCase(
       inMemoryAnswersRepository,
     )
