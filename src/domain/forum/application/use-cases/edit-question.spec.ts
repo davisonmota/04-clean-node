@@ -9,9 +9,11 @@ import { EditQuestionUseCase } from './edit-question'
 
 describe('Edit Question Use Case', () => {
   test('deve editar uma dúvida (question)', async () => {
-    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
     const inMemoryQuestionAttachmentsRepository =
       new InMemoryQuestionAttachmentsRepository()
+    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+    )
 
     const editQuestion = new EditQuestionUseCase(
       inMemoryRepositoryQuestions,
@@ -72,9 +74,11 @@ describe('Edit Question Use Case', () => {
   })
 
   test('Não deve editar uma dúvida (question) se não for o autor', async () => {
-    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
     const inMemoryQuestionAttachmentsRepository =
       new InMemoryQuestionAttachmentsRepository()
+    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+    )
 
     const editQuestion = new EditQuestionUseCase(
       inMemoryRepositoryQuestions,

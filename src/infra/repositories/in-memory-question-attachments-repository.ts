@@ -4,7 +4,7 @@ import { QuestionAttachment } from '@/domain/forum/enterprise/entities/question-
 export class InMemoryQuestionAttachmentsRepository
   implements QuestionAttachmentsRepository
 {
-  readonly items: QuestionAttachment[] = []
+  public items: QuestionAttachment[] = []
 
   async findManyByQuestionId(
     questionId: string,
@@ -13,5 +13,12 @@ export class InMemoryQuestionAttachmentsRepository
       (item) => item.getQuestionId() === questionId,
     )
     return questionAttachments
+  }
+
+  async deleteManyByQuestionId(questionId: string): Promise<void> {
+    const questionAttachments = this.items.filter(
+      (item) => item.getQuestionId() !== questionId,
+    )
+    this.items = questionAttachments
   }
 }

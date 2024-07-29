@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { InMemoryQuestionAttachmentsRepository } from '@/infra/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionsRepository } from '@/infra/repositories/in-memory-question-repository'
 import { makeQuestion } from 'test/factories/make-question'
 import { describe, expect, test } from 'vitest'
@@ -7,7 +8,11 @@ import { DeleteQuestionUseCase } from './delete-question'
 
 describe('Delete Question Use Case', () => {
   test('deve deletar uma dúvida (question) pelo id', async () => {
-    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
+    const inMemoryQuestionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+    )
     const deleteQuestion = new DeleteQuestionUseCase(
       inMemoryRepositoryQuestions,
     )
@@ -30,7 +35,11 @@ describe('Delete Question Use Case', () => {
   })
 
   test('Não deve deletar uma dúvida (question) se não for o autor', async () => {
-    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository()
+    const inMemoryQuestionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    const inMemoryRepositoryQuestions = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+    )
     const deleteQuestion = new DeleteQuestionUseCase(
       inMemoryRepositoryQuestions,
     )
