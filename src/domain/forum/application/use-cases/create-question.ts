@@ -2,6 +2,7 @@ import { Either, right } from '@/core/either'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
+import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
 type Input = {
@@ -47,7 +48,7 @@ export class CreateQuestionUseCase {
       })
     })
 
-    question.setAttachments(questionAttachments)
+    question.setAttachments(new QuestionAttachmentList(questionAttachments))
 
     await this.questionsRepository.create(question)
 

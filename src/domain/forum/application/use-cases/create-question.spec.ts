@@ -20,17 +20,19 @@ describe('Create Question Use Case', () => {
     expect(value?.question.title).toBe('Nova dúvida (question)')
     expect(value?.question.content).toBe('Criando uma nova dúvida (question)')
     expect(value?.question.slug).toBe('nova-du-vida-question')
-    expect(inMemoryRepositoryQuestions.items[0].getAttachments()).toHaveLength(
-      2,
-    )
+    expect(
+      inMemoryRepositoryQuestions.items[0].getAttachments().currentItems,
+    ).toHaveLength(2)
     expect(
       inMemoryRepositoryQuestions.items[0]
-        .getAttachments()[0]
+        .getAttachments()
+        .getItems()[0]
         .getAttachmentId(),
     ).toBe('1')
     expect(
       inMemoryRepositoryQuestions.items[0]
-        .getAttachments()[1]
+        .getAttachments()
+        .getItems()[1]
         .getAttachmentId(),
     ).toBe('2')
   })

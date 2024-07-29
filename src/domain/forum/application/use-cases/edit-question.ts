@@ -1,6 +1,10 @@
 import { Either, left, right } from '@/core/either'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
+import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
 import { NotAllowedError } from '../errors/not-allowed-error '
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { QuestionAttachmentsRepository } from '../repositories/question-attachments-repository'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
 type Input = {
@@ -8,6 +12,7 @@ type Input = {
   questionId: string
   title: string
   content: string
+  attachmentsIds: string[]
 }
 
 type Output = Either<
@@ -26,13 +31,17 @@ type Output = Either<
 >
 
 export class EditQuestionUseCase {
-  constructor(private readonly questionsRepository: QuestionsRepository) {}
+  constructor(
+    private readonly questionsRepository: QuestionsRepository,
+    private readonly questionsAttachmentsRepository: QuestionAttachmentsRepository,
+  ) {}
 
   async execute({
     userId,
     questionId,
     title,
     content,
+    attachmentsIds,
   }: Input): Promise<Output> {
     const question = await this.questionsRepository.findById(questionId)
 
@@ -44,8 +53,25 @@ export class EditQuestionUseCase {
       return left(new NotAllowedError())
     }
 
+    const currentQuestionAttachments =
+      await this.questionsAttachmentsRepository.findManyByQuestionId(questionId)
+
+    const questionAttachmentList = new QuestionAttachmentList(
+      currentQuestionAttachments,
+    )
+
+    const questionAttachments = attachmentsIds.map((attachmentId) => {
+      return QuestionAttachment.create({
+        attachmentId: new UniqueEntityID(attachmentId),
+        questionId: new UniqueEntityID(question.getId()),
+      })
+    })
+
+    questionAttachmentList.update(questionAttachments)
+
     question.setTitle(title)
     question.setContent(content)
+    question.setAttachments(questionAttachmentList)
 
     await this.questionsRepository.save(question)
 
