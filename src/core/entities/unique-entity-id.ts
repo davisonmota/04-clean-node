@@ -10,4 +10,8 @@ export class UniqueEntityID {
   getValue(): string {
     return this._value
   }
+
+  equals(id: UniqueEntityID): boolean {
+    return id.getValue() === this._value
+  }
 }
