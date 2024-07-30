@@ -1,4 +1,6 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { PaginationParams } from '@/core/repositories/pagination-params'
+import { DomainEvents } from '@/domain/events/domain-events'
 import { AnswerAttachmentsRepository } from '@/domain/forum/application/repositories/answer-attachments-repository'
 import { AnswersRepository } from '@/domain/forum/application/repositories/answers-repository'
 import { Answer } from '@/domain/forum/enterprise/entities/answer'
@@ -12,6 +14,7 @@ export class InMemoryAnswersRepository implements AnswersRepository {
 
   async create(answer: Answer): Promise<void> {
     this.items.push(answer)
+    DomainEvents.dispatchEventsForAggregate(new UniqueEntityID(answer.getId()))
   }
 
   async save(answer: Answer): Promise<void> {
@@ -20,6 +23,7 @@ export class InMemoryAnswersRepository implements AnswersRepository {
     )
 
     this.items[answerIndex] = answer
+    DomainEvents.dispatchEventsForAggregate(new UniqueEntityID(answer.getId()))
   }
 
   async findById(id: string): Promise<Answer | null> {
