@@ -1,7 +1,7 @@
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error '
 import { InMemoryAnswerCommentsRepository } from '@/infra/repositories/in-memory-answer-comments-repository'
 import { makeAnswerComment } from 'test/factories/make-answer-comment'
 import { describe, expect, test } from 'vitest'
-import { NotAllowedError } from '../errors/not-allowed-error '
 import { DeleteAnswerCommentUseCase } from './delete-answer-comment'
 
 describe('Delete Answer Comment Use Case', () => {
